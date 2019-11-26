@@ -1,36 +1,40 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include "printer.h"
 #include "board.h"
 
-int main() {
-  // ask for preferences
-  int length, width, mine_count, flag_count;
+int main(int argc, char **argv) {
+  int option, height = 10, width = 15, mine_count = 10;
+  while ((option = getopt(argc, argv, "w:h:m:f:")) != -1)
+    switch (option) {
+      case 'w':
+        width = atoi(optarg);
+        break;
+      case 'h':
+        height = atoi(optarg);
+        break;
+      case 'm':
+        mine_count = atoi(optarg);
+        break;
+      case 'f':
+        break;
+    }
 
-  do {
-    printf("Please select a length\n");
-    scanf("%d", &length);
-  } while (!(length > 0 && length < 10));
-
-  do {
-    printf("Please select a width\n");
-    scanf("%d", &width);
-  } while (!(width > 0 && width < 10));
-
-  mine_count = length * width / 5;
-  flag_count = mine_count;
+  int flag_count = mine_count;
 
   // setup the board
-  Cell board[length][width];
-  initialize_board(length, width, board);
-  place_mines(length, width, board);
+  Cell board[height][width];
+  initialize_board(height, width, board);
+  place_mines(height, width, board);
 
   // game loop
   int m, n;
   bool lost = false;
 
   do {
-    print_board(length, width, board, 5);
+    print_board(height, width, board, 5);
 
     // ask input
     do {
@@ -47,7 +51,7 @@ int main() {
     if (board[m][n].has_mine) {
       lost = true;
     } else {
-      reveal_cell(length, width, board, m, n);
+      reveal_cell(height, width, board, m, n);
     }
   } while (!lost);
 
