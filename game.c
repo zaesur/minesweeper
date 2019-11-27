@@ -2,11 +2,14 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "printer.h"
 #include "board.h"
 
 int main(int argc, char **argv) {
-  int option, height = 10, width = 15, mine_count = 10;
+  // declare variables
+  int height = 10, width = 10, mine_count = height * width / 10;
+
+  // process command line arguments
+  int option;
   while ((option = getopt(argc, argv, "w:h:m:f:")) != -1)
     switch (option) {
       case 'w':
@@ -20,12 +23,14 @@ int main(int argc, char **argv) {
         break;
       case 'f':
         break;
+      default:
+        abort();
     }
 
   int flag_count = mine_count;
 
   // setup the board
-  Cell board[height][width];
+  cell board[height][width];
   initialize_board(height, width, board);
   place_mines(height, width, board);
 
