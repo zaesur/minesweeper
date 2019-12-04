@@ -4,7 +4,6 @@ all: game
 
 game: game.o board.o
 	$(CC) game.o board.o -lsdl2 -o game
-
 game.o: game.c
 	$(CC) -c game.c
 
