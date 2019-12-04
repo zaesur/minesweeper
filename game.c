@@ -30,9 +30,8 @@ int main(int argc, char **argv) {
   int flag_count = mine_count;
 
   // setup the board
-  cell board[height][width];
-  initialize_board(height, width, board);
-  place_mines(height, width, board);
+  cell **board = initialize_board(height, width);
+  place_mines(height, width, 10, board);
 
   // game loop
   int m, n;

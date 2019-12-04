@@ -2,32 +2,29 @@
 #include <stdbool.h> 
 #include <stdlib.h> 
 #include <time.h>
-#define MINECOUNT 15
-#define MAX(a,b) ((a) > (b) ? (a) : (b))
-#define MIN(a,b) ((a) < (b) ? (a) : (b)) 
+#include <math.h>
+#include "board.h"
 
-typedef struct cell {
-  int neighbouring_mine_count;
-  bool is_revealed;
-  bool has_mine;
-  bool has_flag;
-} cell;
-
-void initialize_board(int height, int width, struct cell board[height][width]) {
+cell **initialize_board(int height, int width) {
+  cell **board; 
+  board = (cell **)malloc(sizeof(cell *) * height);
   for (int m = 0; m < height; m++) {
+    board[m] = (cell *)malloc(sizeof(cell) * width);
     for (int n = 0; n < width; n++) {
       cell c = { 0, false, false, false };
       board[m][n] = c;
     };
   };
+
+  return board;
 };
 
-void place_mines(int height, int width, cell board[height][width]) {
+void place_mines(int height, int width, int mine_count, cell **board) {
   // initialize the seed so the mines are truly random
   srand(time(0));
 
   // place the mines
-  for (int i = 0; i < MINECOUNT; i++) { 
+  for (int i = 0; i < mine_count; i++) { 
     int m, n; 
 
     // look for a cell that does not have a mine
@@ -40,15 +37,15 @@ void place_mines(int height, int width, cell board[height][width]) {
     board[m][n].has_mine = true; 
 
     // increment mine count for neighbouring cells
-    for (int p = MAX(0, m - 1); p < MIN(height, m + 2); p++) {
-      for (int q = MAX(0, n - 1); q < MIN(width, n + 2); q++) {
+    for (int p = fmax(0, m - 1); p < fmin(height, m + 2); p++) {
+      for (int q = fmax(0, n - 1); q < fmin(width, n + 2); q++) {
         board[p][q].neighbouring_mine_count++;
       };
     };
   }; 
 };
 
-void reveal_cell(int height, int width, cell board[height][width], int m, int n) {
+void reveal_cell(int height, int width, cell **board, int m, int n) {
   // if the cell hasn't been revealed and its neighbouring mine 
   // count is 0, also reveal neighbours
 
@@ -57,8 +54,8 @@ void reveal_cell(int height, int width, cell board[height][width], int m, int n)
   board[m][n].is_revealed = true;
 
   if (c.neighbouring_mine_count == 0 && !c.is_revealed) {
-    for (int p = MAX(0, m - 1); p < MIN(height, m + 2); p++) {
-      for (int q = MAX(0, n - 1); q < MIN(width, n + 2); q++) {
+    for (int p = fmax(0, m - 1); p < fmin(height, m + 2); p++) {
+      for (int q = fmax(0, n - 1); q < fmin(width, n + 2); q++) {
         reveal_cell(height, width, board, p, q);
       };
     }; 
@@ -91,7 +88,7 @@ char choose_symbol(cell *c) {
   };
 } 
 
-void print_row(int m, int width, cell board[][width]) {
+void print_row(int m, int width, cell **board) {
   printf("%d  ", m);
   for (int n = 0; n < width; n++) {
     printf("| %c|", choose_symbol(&board[m][n]));
@@ -99,13 +96,13 @@ void print_row(int m, int width, cell board[][width]) {
   printf("\n");
 } 
 
-void print_rows(int height, int width, cell board[height][width]) {
+void print_rows(int height, int width, cell **board) {
   for (int m = 0; m < height; m++) {
     print_row(m, width, board);
   };
 } 
 
-void print_board(int height, int width, cell board[height][width], int flags) {
+void print_board(int height, int width, cell **board, int flags) {
   print_flags(flags);
   print_header(height);
   print_rows(height, width, board);
