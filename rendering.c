@@ -1,7 +1,3 @@
-#include <SDL2/SDL.h>
-#include <stdbool.h>
-#include "board.h"
-#include "game.h"
 #include "rendering.h"
 
 SDL_Renderer *renderer;
@@ -22,7 +18,7 @@ char *paths[NUMBER_OF_TEXTURES] = {
 
 SDL_Texture *textures[NUMBER_OF_TEXTURES];
 
-void initialize_window(const char *title, int rows, int columns) {
+void initialize_window(const char *title, int columns, int rows) {
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     printf("Could not initialize SDL: %s\n", SDL_GetError());
     exit(1);
@@ -37,8 +33,7 @@ void initialize_window(const char *title, int rows, int columns) {
 
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-}
-
+} 
 
 void initialize_textures() {
   for (int i = 0; i < NUMBER_OF_TEXTURES; i++) {
@@ -52,8 +47,8 @@ void initialize_textures() {
   };
 }
 
-void initialize_gui(int rows, int columns) {
-  initialize_window("Minesweeper", rows, columns);
+void initialize_gui(int columns, int rows) {
+  initialize_window("Minesweeper", columns, rows);
   initialize_textures();
 }
 
@@ -76,6 +71,25 @@ void render_game(game_t *game) {
     };
   };
   SDL_RenderPresent(renderer);
+}
+
+void read_input(game_t *game) {
+  SDL_Event event;
+  while (SDL_PollEvent(&event)) {
+    switch (event.type) {
+      case SDL_QUIT:
+        game->lost = true;
+        break;
+      case SDL_MOUSEBUTTONDOWN:
+        if (event.button.button == SDL_BUTTON_LEFT) {
+          click_cell(game, event.button.x / IMAGE_WIDTH, event.button.y / IMAGE_HEIGHT);
+        } else if (event.button.button == SDL_BUTTON_RIGHT) {
+          flag_cell(game, event.button.x / IMAGE_WIDTH, event.button.y / IMAGE_HEIGHT);
+        }
+        break;
+      default: {}
+    }
+  }
 }
 
 void free_gui() {

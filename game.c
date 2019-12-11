@@ -1,27 +1,31 @@
-#include "board.h"
 #include "game.h"
 
-void click_cell(game_t *game, int row, int column) {
-  cell_t *cell = &game->board[row][column];
+void flood_cells(game_t *game, int column, int row) {
+  cell_t cell = game->board[column][row];
 
-  if (cell.has_mine) {
-    game->lost = true;
-  } else if (cell.neighbouring_mine_count != 0) {
-    c->is_revealed = true;
-  } else {
-    flood_cells(game_t *game, int row, int column);
+  game->board[column][row].is_revealed = true;
+
+  if (cell.neighbouring_mine_count == 0 && !cell.is_revealed) {
+    for (int m = fmax(0, column - 1); m < fmin(game->columns, column + 2); m++) {
+      for (int n = fmax(0, row - 1); n < fmin(game->rows, row + 2); n++) {
+        flood_cells(game, m, n);
+      };
+    }; 
   }
 }
 
-void flood_cells(game_t *game, int row, int column) {
-  cell_t *cell = &game->board[row][column];
+void click_cell(game_t *game, int column, int row) {
+  cell_t *cell = &game->board[column][row];
 
-  if (cell.neighbouring_mine_count == 0 && !cell.is_revealed) {
-    c->is_revealed = true;
-    for (int p = fmax(0, m - 1); p < fmin(game->height, m + 2); p++) {
-      for (int q = fmax(0, n - 1); q < fmin(game->width, n + 2); q++) {
-        flood_cells(game, p, q);
-      };
-    }; 
-  }; 
+  if (cell->has_mine) {
+    game->lost = true;
+  } else if (cell->neighbouring_mine_count > 0) {
+    cell->is_revealed = true;
+  } else {
+    flood_cells(game, column, row);
+  }
+}
+
+void flag_cell(game_t *game, int column, int row) {
+  game->board[column][row].has_flag = true;
 }

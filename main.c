@@ -2,8 +2,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <SDL2/SDL.h>
-#include "board.h"
 #include "game.h"
 #include "rendering.h"
 
@@ -30,7 +28,7 @@ int main(int argc, char *argv[]) {
         abort();
     }
 
-  if (!(height & width & mine_count)) {
+  if (argc < 1) {
     printf("missing arguments\n");
     exit(1);
   }
@@ -44,17 +42,13 @@ int main(int argc, char *argv[]) {
     .board = create_board(height, width, mine_count),
   };
 
-  initialize_gui(height, width);
-  SDL_Event e;
-  bool quit = false;
-  while (!quit) {
-    while (SDL_PollEvent(&e)) {
-      if (e.type == SDL_QUIT) {
-        quit = true;
-      }
-    }
+  initialize_gui(width, height);
+
+  while (!game.lost) {
     render_game(&game);
+    read_input(&game);
   }
+
   free_gui(); 
 
   return EXIT_SUCCESS;

@@ -1,5 +1,6 @@
 #ifndef GAME_H_
 #define GAME_H_
+#include "board.h"
 typedef struct {
   bool lost;
   int rows;
@@ -9,5 +10,6 @@ typedef struct {
   cell_t **board;
 } game_t;
 
-void click_cell(game_t *game, int row, int column);
+void click_cell(game_t *game, int column, int row);
+void flag_cell(game_t *game, int column, int row);
 #endif // GAME_H_

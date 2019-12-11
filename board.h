@@ -1,6 +1,9 @@
 #ifndef BOARD_H_
 #define BOARD_H_
-
+#include <stdbool.h> 
+#include <stdlib.h> 
+#include <time.h>
+#include <math.h> 
 typedef struct {
   int neighbouring_mine_count;
   bool has_mine;
@@ -8,5 +11,5 @@ typedef struct {
   bool is_revealed;
 } cell_t;
 
-cell_t **create_board(int height, int width, int mine_count);
+cell_t **create_board(int columns, int rows, int mine_count);
 #endif // BOARD_H_
