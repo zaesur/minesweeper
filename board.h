@@ -6,12 +6,7 @@ typedef struct {
   bool has_mine;
   bool has_flag;
   bool is_revealed;
-} cell;
+} cell_t;
 
-cell **initialize_board(int length, int width);
-void place_mines(int length, int width, int mine_count, cell **board);
-void reveal_cell(int length, int width, cell **board, int m, int n);
-void flag_cell(cell *c);
-void print_board(int length, int width, cell **board, int flags);
-
+cell_t **create_board(int height, int width, int mine_count);
 #endif // BOARD_H_
