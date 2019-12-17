@@ -3,8 +3,8 @@ EXEC=minesweeper
 
 all: $(EXEC)
 
-$(EXEC): main.o game.o board.o rendering.o
-	$(CC) main.o game.o board.o rendering.o -lsdl2 -o $(EXEC)
+$(EXEC): main.o game.o board.o rendering.o file.o
+	$(CC) main.o game.o board.o rendering.o file.o -lsdl2 -o $(EXEC)
 
 main.o: main.c
 	$(CC) -c main.c
@@ -17,6 +17,9 @@ board.o: board.c board.h
 
 rendering.o: rendering.c rendering.h
 	$(CC) -c rendering.c
+
+file.o: file.c file.h
+	$(CC) -c file.c
 
 clean:
 	rm -f *.o $(EXEC)

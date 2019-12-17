@@ -48,3 +48,8 @@ cell_t **create_board(int columns, int rows, int mine_count) {
   place_mines(columns, rows, mine_count, board);
   return board; 
 }
+
+void free_board(cell_t **board, int columns) {
+  while (columns) free(board[--columns]);
+  free(board);
+}

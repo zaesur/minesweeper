@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include "board.h"
 #include "game.h"
+#include "file.h"
 #define IMAGE_HEIGHT 50
 #define IMAGE_WIDTH 50
 #define NUMBER_OF_TEXTURES 11

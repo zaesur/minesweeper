@@ -73,12 +73,44 @@ void render_game(game_t *game) {
   SDL_RenderPresent(renderer);
 }
 
+void show_quit_popup(game_t *game) {
+  const SDL_MessageBoxButtonData buttons[] = {
+    { 0, 0, "Quit" },
+    { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Save" },
+    { SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "Cancel" },
+  };
+
+  const SDL_MessageBoxData messageboxdata = {
+    SDL_MESSAGEBOX_INFORMATION,
+    NULL,
+    "Quit",
+    "Do you want to save before quitting?",
+    SDL_arraysize(buttons),
+    buttons,
+    NULL
+  };
+
+  int buttonid;
+
+  SDL_ShowMessageBox(&messageboxdata, &buttonid);
+  
+  if (buttonid == 1) {
+    save(game);
+  }
+
+  if (buttonid > 0) {
+    game->lost = true;
+  }
+
+  return;  
+}
+
 void read_input(game_t *game) {
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
     switch (event.type) {
       case SDL_QUIT:
-        game->lost = true;
+        show_quit_popup(game);
         break;
       case SDL_MOUSEBUTTONDOWN:
         if (event.button.button == SDL_BUTTON_LEFT) {

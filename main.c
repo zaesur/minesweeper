@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include "game.h"
 #include "rendering.h"
+#include "file.h"
 
 int main(int argc, char *argv[]) {
   // declare variables
@@ -49,6 +50,7 @@ int main(int argc, char *argv[]) {
     read_input(&game);
   }
 
+  free_board(game.board, game.columns);
   free_gui(); 
 
   return EXIT_SUCCESS;

@@ -12,4 +12,5 @@ typedef struct {
 } cell_t;
 
 cell_t **create_board(int columns, int rows, int mine_count);
+void free_board(cell_t **board, int columns);
 #endif // BOARD_H_
