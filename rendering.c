@@ -98,7 +98,7 @@ void show_quit_popup(game_t *game) {
     save(game);
   }
 
-  if (buttonid > 0) {
+  if (buttonid != 2) {
     game->lost = true;
   }
 
