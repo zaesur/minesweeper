@@ -9,7 +9,7 @@ typedef struct {
   int flag_count;
   cell_t **board;
 } game_t;
-
+void place_mines(game_t *game);
 void click_cell(game_t *game, int column, int row);
 void flag_cell(game_t *game, int column, int row);
 #endif // GAME_H_

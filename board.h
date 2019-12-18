@@ -11,6 +11,6 @@ typedef struct {
   bool is_revealed;
 } cell_t;
 
-cell_t **create_board(int columns, int rows, int mine_count);
+cell_t **create_board(int columns, int rows);
 void free_board(cell_t **board, int columns);
 #endif // BOARD_H_

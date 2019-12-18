@@ -7,43 +7,44 @@
 #include "file.h"
 
 int main(int argc, char *argv[]) {
-  // declare variables
-  int height, width, mine_count;
+  game_t game;
 
-  // process command line arguments
+  /* process command line arguments */
   int option;
-  while ((option = getopt(argc, argv, "w:h:m:f:")) != -1)
+  while ((option = getopt(argc, argv, "w:h:m:f:")) != -1) {
+    /* if we encounter -f we override other flags */
+    if (option == 'f') {
+        load(&game, optarg);
+        break;
+    }
+
+    /* else we switch */
     switch (option) {
       case 'w':
-        width = atoi(optarg);
+        game.columns = atoi(optarg);
         break;
       case 'h':
-        height = atoi(optarg);
+        game.rows = atoi(optarg);
         break;
       case 'm':
-        mine_count = atoi(optarg);
-        break;
-      case 'f':
+        game.mine_count = game.flag_count = atoi(optarg);
         break;
       default:
         abort();
     }
+  }
 
   if (argc < 1) {
     printf("missing arguments\n");
     exit(1);
   }
 
-  game_t game = {
-    .lost = false,
-    .rows = height,
-    .columns = width,
-    .mine_count = mine_count,
-    .flag_count = mine_count,
-    .board = create_board(height, width, mine_count),
-  };
+  if (game.mine_count > 0) {
+    game.board = create_board(game.columns, game.rows);
+    place_mines(&game);
+  } 
 
-  initialize_gui(width, height);
+  initialize_gui(game.columns, game.rows);
 
   while (!game.lost) {
     render_game(&game);
