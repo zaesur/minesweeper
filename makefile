@@ -1,25 +1,28 @@
 CC=gcc
 EXEC=minesweeper
 
+CFLAGS=$(shell sdl2-config --cflags)
+LDFLAGS=$(shell sdl2-config --libs)
+
 all: $(EXEC)
 
 $(EXEC): main.o game.o board.o rendering.o file.o
-	$(CC) main.o game.o board.o rendering.o file.o -lsdl2 -o $(EXEC)
+	$(CC) main.o game.o board.o rendering.o file.o $(LDFLAGS) -lm -o $(EXEC)
 
 main.o: main.c
-	$(CC) -c main.c
+	$(CC) $(CFLAGS) -c main.c
 
 game.o: game.c game.h
-	$(CC) -c game.c
+	$(CC) $(CFLAGS) -c game.c
 
 board.o: board.c board.h
-	$(CC) -c board.c
+	$(CC) $(CFLAGS) -c board.c
 
 rendering.o: rendering.c rendering.h
-	$(CC) -c rendering.c
+	$(CC) $(CFLAGS) -c rendering.c
 
 file.o: file.c file.h
-	$(CC) -c file.c
+	$(CC) $(CFLAGS) -c file.c
 
 clean:
 	rm -f *.o $(EXEC)
