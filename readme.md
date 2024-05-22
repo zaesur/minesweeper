@@ -5,7 +5,7 @@ for an undergrad course in systems programming.
 ## Installation
  1. Run `apt-get install libsdl2-dev`
  1. Run `make`
- 1. Run `./minesweeper`
+ 1. Run `./minesweeper -w 10 -h 10 -m 10`
 
 ## Playing a game
   * Left clicking opens a cell
