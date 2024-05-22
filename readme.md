@@ -2,6 +2,8 @@
 Implementation of the classic minesweeper game
 for an undergrad course in systems programming.
 
+![minesweeper](https://github.com/zaesur/minesweeper-tasm/blob/main/minesweeper.png?raw=true)
+
 ## Installation
  1. Run `apt-get install libsdl2-dev`
  1. Run `make`
